@@ -10,10 +10,11 @@ producer = KafkaProducer(
         )
 
 df_test = pd.read_csv('data/test_preprocessed.csv')
+df_test = df_test.dropna()
 
 for _, row in df_test.iterrows():
     data = {
         'X' : [row.tolist()]
         }
     producer.send('test', value=data)
-    sleep(2)
+    sleep(1)
