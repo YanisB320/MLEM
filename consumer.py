@@ -13,4 +13,4 @@ consumer = KafkaConsumer(
 for msg in consumer:
     response = requests.post('http://localhost:8000/predict', json=msg.value)
 
-    print(response)
+    print(response.text)

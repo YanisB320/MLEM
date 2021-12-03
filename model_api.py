@@ -15,7 +15,7 @@ prediction = None
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Projet ML Embarqué"}
 
 @app.post("/predict")
 async def post_prediction(data: DataToPredict):
