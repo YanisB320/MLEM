@@ -10,7 +10,14 @@ consumer = KafkaConsumer(
      group_id='my_group',
      value_deserializer=lambda x: loads(x.decode('utf-8')))
 
+i = 0
 for msg in consumer:
-    response = requests.post('http://localhost:8000/predict', json=msg.value)
+    if (i % 100 == 0):
+        response = requests.get('http://localhost:8000/train')
+        print(response.text)
 
-    print(response.text)
+    prediction = requests.post('http://localhost:8000/predict', json=msg.value)
+
+    print(prediction.text)
+
+    i += 1
