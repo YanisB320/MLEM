@@ -16,17 +16,21 @@ consumer = KafkaConsumer(
 
 model = None
 
-if (os.path.isfile('model/model.joblib')):
-    model = jl.load('model/model.joblib')
-else:
-    model = linear_model.SGDClassifier()
+if (os.path.isfile('model.joblib')):
+    model = jl.load('model.joblib')
 
 for msg in consumer:
     if msg.value.get("y", None) is not None: # train if we have a label
+
+        if not model:
+            model = linear_model.SGDClassifier()
+
         model.partial_fit(msg.value['X'], [msg.value['y']], classes=[0, 1])
         print("train model on " + str(msg.value['X']))
+
         # save model
-        jl.dump(model, 'model/model.joblib')
+        jl.dump(model, 'model.joblib')
     else: # else test
-        prediction = model.predict(msg.value['X'])
-        print('predict y: ' + str(prediction) + ' with X: ' + str(msg.value['X']))
+        if model is not None:
+            prediction = model.predict(msg.value['X'])
+            print('predict y: ' + str(prediction) + ' with X: ' + str(msg.value['X']))
