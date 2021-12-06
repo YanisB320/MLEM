@@ -16,5 +16,5 @@ for _, row in df_test.iterrows():
     data = {
         'X' : [row.tolist()]
         }
-    producer.send('test', value=data)
-    sleep(2)
+    producer.send('train', value=data)
+    sleep(1)

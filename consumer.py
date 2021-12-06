@@ -22,8 +22,11 @@ else:
     model = linear_model.SGDClassifier()
 
 for msg in consumer:
-    model.partial_fit(msg.value['X'], [msg.value['y']], classes=[0, 1])
-    print("train model on " + str(msg.value['X']))
-
-    # save model
-    jl.dump(model, 'model/model.joblib')
+    if msg.value.get("y", None) is not None: # train if we have a label
+        model.partial_fit(msg.value['X'], [msg.value['y']], classes=[0, 1])
+        print("train model on " + str(msg.value['X']))
+        # save model
+        jl.dump(model, 'model/model.joblib')
+    else: # else test
+        prediction = model.predict(msg.value['X'])
+        print('predict y: ' + str(prediction) + ' with X: ' + str(msg.value['X']))

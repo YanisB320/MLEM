@@ -11,18 +11,24 @@ producer = KafkaProducer(
 
 df_train = pd.read_csv('data/train_preprocessed.csv')
 df_train = df_train.dropna()
+# df_test = pd.read_csv('data/test_preprocessed.csv')
+# df_test = df_test.dropna()
 
 X = df_train.iloc[:,1:]
 y = df_train.iloc[:,0]
 
 i = 0
 for _, row in X.iterrows():
-    data = {
+    data_train = {
         'X' : [row.tolist()],
         'y' : int(y.iloc[i])
         }
-    producer.send('train', value=data)
+    # data_test = {
+    #     'X' : [row.tolist()]
+    #     }
+    producer.send('train', value=data_train)
+    # producer.send('train', value=data_test)
 
     i += 1
 
-    sleep(1)
+    sleep(5)
