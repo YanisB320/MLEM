@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from json import loads
 import requests
+import joblib as jl
 
 consumer = KafkaConsumer(
     'test',
@@ -10,8 +11,9 @@ consumer = KafkaConsumer(
      group_id='my_group',
      value_deserializer=lambda x: loads(x.decode('utf-8')))
 
+model = jl.load('model/model.joblib')
+
 for msg in consumer:
-    prediction = requests.post('http://localhost:8000/predict', json=msg.value)
+    prediction = model.predict(msg.value['X'])
 
-    print(prediction.text)
-
+    print('X: ' + str(msg.value['X']) + ' y: ' + str(prediction))

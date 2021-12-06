@@ -17,8 +17,6 @@ y = df_train.iloc[:,0]
 
 i = 0
 for _, row in X.iterrows():
-    print(int(y.iloc[i]))
-
     data = {
         'X' : [row.tolist()],
         'y' : int(y.iloc[i])
@@ -27,4 +25,4 @@ for _, row in X.iterrows():
 
     i += 1
 
-    sleep(5)
+    sleep(1)
